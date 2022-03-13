@@ -1,22 +1,10 @@
 const inquirer = require('inquirer');
-const generatePage = require('./src/page-template.js');
-const { writeFile, copyFile } = require('./utils/generate-site.js');
+const fs = require('fs');
+const util = require('util');
+const generateMarkdown = require('./utils/generate-readme.js');
 
-const promptUser = () => {
+const promptReadme = () => {
     return inquirer.prompt([
-        {
-            type: 'input',
-            name: 'name',
-            message: 'What is your name?',
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;
-                } else {
-                    console.log('Please enter your name!');
-                    return false;
-                }
-            }
-        },
         {
             type: 'input',
             name: 'github',
@@ -31,47 +19,40 @@ const promptUser = () => {
             }
         },
         {
-            type: 'confirm',
-            name: 'confirmAbout',
-            message: 'Would you like to enter some information about yourself for an "About" section?',
-            default: true
-        },
-        {
             type: 'input',
-            name: 'about',
-            message: 'Provide some info about yourself:',
-            when: ({ confirmAbout }) => {
-                if (confirmAbout) {
+            name: 'email',
+            message: 'What is your email address?',
+            validate: repoInput => {
+                if (repoInput) {
                     return true;
                 } else {
+                    console.log('Please enter your email!');
                     return false;
                 }
             }
-        }
-    ]);
-};
-
-const promptProject = portfolioData => {
-    if (!portfolioData.projects) {
-        portfolioData.projects = [];
-    }
-
-    console.log(`
-    =================
-    Add a New Project
-    =================
-    `);
-
-    return inquirer.prompt([
+        },
         {
             type: 'input',
-            name: 'name',
-            message: 'What is the name of your project?',
-            validate: nameInput => {
-                if (nameInput) {
+            name: 'repoName',
+            message: 'What is the name of your repository?',
+            validate: repoInput => {
+                if (repoInput) {
                     return true;
                 } else {
-                    console.log('Please enter the name of your project!');
+                    console.log('Please enter a valid repository name!');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'headline',
+            message: 'Please provide a project headline.',
+            validate: headlineInput => {
+                if (headlineInput) {
+                    return true;
+                } else {
+                    console.log('Please enter a valid repository name!');
                     return false;
                 }
             }
@@ -79,72 +60,75 @@ const promptProject = portfolioData => {
         {
             type: 'input',
             name: 'description',
-            message: 'Provide a description of your project (Required):',
-            validate: nameInput => {
-                if (nameInput) {
+            message: 'Please provide a description for your project.',
+            validate: descInput => {
+                if (descInput) {
                     return true;
                 } else {
-                    console.log('Please enter a project description!');
+                    console.log('Please enter a valid repository name!');
                     return false;
                 }
             }
-        },
-        {
-            type: 'checkbox',
-            name: 'languages',
-            message: 'What did you build this project with? (Check all that apply)',
-            choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'JQuery', 'Bootstrap', 'Node']
         },
         {
             type: 'input',
-            name: 'link',
-            message: 'Enter the Github link to your project. (Required)',
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;
-                } else {
-                    console.log('Please enter the project Github URL!');
-                    return false;
-                }
-            }
+            message: "(Optional) Provide steps to install your project.",
+            name: 'installation'
         },
         {
-            type: 'confirm',
-            name: 'feature',
-            message: 'Would you like to feature this project?',
-            default: false
+            type: 'input',
+            message: "(Optional) Provide example usage for your project.",
+            name: 'usage'
         },
         {
-            type: 'confirm',
-            name: 'confirmAddProject',
-            message: 'Would you like to enter another project?',
-            default: false
+            type: 'input',
+            message: "(Optional) How can others contribute to your project?",
+            name: 'contributing'
+        },
+        {
+            type: 'input',
+            message: "(Optional) Are there any test cases for your project you would like to list?",
+            name: 'tests'
+        },
+        {
+            type: 'list',
+            message: "(Optional) Choose a license for your project.",
+            name: 'license',
+            choices: [
+                "Apache",
+                "Creative Commons Zero",
+                "ISC",
+                "MIT",
+                "Unlicense",
+                "Open",
+                "GNU",
+                "Beer"
+            ]
         }
-    ]).then(projectData => {
-        portfolioData.projects.push(projectData);
-        if (projectData.confirmAddProject) {
-            return promptProject(portfolioData);
-        } else {
-            return portfolioData;
-        }
-    });
+    ]);
 };
 
-promptUser()
-    .then(promptProject)
-    .then(portfolioData => {
-        return generatePage(portfolioData);
-    })
-    .then(pageHTML => {
-        return writeFile(pageHTML);
-    })
-    .then(writeFileResponse => {
-        console.log(writeFileResponse);
-        return copyFile();
-    })
-    .then(copyFileResponse => {
-        console.log(copyFileResponse);
-    })
-    .catch(err => {
-        console.log(err);
+function writeReadmeFile(fileName, data) {
+    fs.writeFile(fileName, data, err => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log('Succuessfully generated readme file');
     });
+}
+
+const writeFiAs = util.promisify(writeReadmeFile);
+
+async function start() {
+    try {
+        const responses = await promptReadme();
+        console.log('Generating readme.md file.');
+
+        const md = generateMarkdown(responses);
+        await writeFiAs('readme.md', md);
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+start();

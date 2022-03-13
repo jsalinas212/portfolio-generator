@@ -1,19 +1,36 @@
-# Porfolio Generator
 
-## Purpose
+    # README Generator
+  
+    ## Table-of-Contents
+    * [Description](#description)
+    * [Installation](#installation)
+    * [Usage](#usage)
+    * [License](#license)
+    * [Contributing](#contributing)
+    * [Tests](#tests)
+    * [Questions](#questions)
+    
+    ## [Description](#table-of-contents)
+    This application will dynamically generate your readme file quick and easy.
+    ## [Installation](#table-of-contents)
+    Clone the repository, run npm install on the project root folder, and then run node start app.
+    ## [Usage](#table-of-contents)
+    You would use this to generate a nice clean readme file when you don't have much time to manually create one, or if you simply hate writing markdown.
+    
+    
+    ## [License](#table-of-contents)
+    This project is covered under the following license:
+    [Unlicense](https://choosealicense.com/licenses/Unlicense)
+      
 
-Portfolio will dynamically generate a profolio page based on a series of questions answered by the user.
-
-![Portfolio Generator Screen Capture 01](./images/portfolio_gen_screencap01.png)
-
-![Portfolio Generator Screen Capture 02](./images/portfolio_gen_screencap02.png)
-
-## Built With
-* JavaScript
-* Node.js
-
-### Node Modules Used
-* Inquirer module
-
-## Author
-Jorge A Salinas Jr
+    ## [Contributing](#table-of-contents)
+    Clone the repository and create a pull request after making your modifications!
+    
+    ## [Tests](#table-of-contents)
+    undefined
+    
+    ## [Questions](#table-of-contents)
+    Please contact me using the following links:
+    [GitHub](https://github.com/undefined)
+    [Email: asalinas212@outlook.com](mailto:asalinas212@outlook.com)
+  
