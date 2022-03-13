@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
     # README Generator
   
@@ -34,3 +35,7 @@
     [GitHub](https://github.com/undefined)
     [Email: asalinas212@outlook.com](mailto:asalinas212@outlook.com)
   
+=======
+# portfolio-generator
+Dynamically generated portfolios using Node.js
+>>>>>>> parent of b719973... update readme
